@@ -405,7 +405,8 @@ function startGame() {
   raAluno = raInput;
   document.getElementById("nome-usuario").textContent = nomeAluno;
   document.getElementById("inicio").style.display = "none";
-  document.getElementById("escolha-materia").style.display = "block";
+  document.getElementById("escolha-materia").style.display = "block"; 
+
 }
 
 document
@@ -492,44 +493,42 @@ function mostrarResultado() {
   document.getElementById("nota-final").textContent = notaFinal.toFixed(1);
   document.getElementById("jogo").style.display = "none";
   document.getElementById("resultado").style.display = "block";
-  salvarResultado(); // tive que adicionar aqui, pq a função foi criada mas nao estava sendo usada
-}
-
-document.getElementById("reiniciar").addEventListener("click", function () {
-  document.getElementById("resultado").style.display = "none";
-  document.getElementById("inicio").style.display = "block";
   document.getElementById("nome-aluno").value = "";
-  respostasCorretas = 0;
-  respostasErradas = 0;
-  perguntaAtual = 0;
-  tempoRestante = 600;
-});
+  document.getElementById("ra").value = "";
 
-function salvarResultado() {
-  const resultado = {
-    ra: raAluno, // Adicionado: Coleta o RA do aluno
-    nome: nomeAluno,
-    materia: materiaEscolhida,
-    acertos: respostasCorretas,
-    erros: respostasErradas,
-    desempenho: (respostasCorretas / perguntas[materiaEscolhida].length) * 100,
-    notaFinal: ((respostasCorretas / perguntas[materiaEscolhida].length) * 10).toFixed(1),
-  };
-
-  console.log(resultado);
-
-  fetch('salvar_resultado.php', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(resultado),
-  })
+    // Enviar dados para o backend
+    const resultado = {
+      nomeAluno: nomeAluno,
+      raAluno: raAluno,
+      materia: materiaEscolhida,
+      acertos: respostasCorretas,
+      erros: respostasErradas,
+      porcentagem: desempenho,
+      notaFinal: notaFinal
+    };
+  
+    fetch('http://localhost/quiz/salvar_resultado.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(resultado)
+    })
     .then(response => response.json())
     .then(data => {
-      console.log('Resultado salvo com sucesso:', data);
+      console.log(data);
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('Erro ao salvar resultado:', error);
     });
-}
+  }
+    document.getElementById("reiniciar").addEventListener("click", function () { 
+    document.getElementById("resultado").style.display = "none";
+    document.getElementById("inicio").style.display = "block";
+    document.getElementById("nome-aluno").value = "";
+    document.getElementById("ra").value = "";
+    respostasCorretas = 0;
+    respostasErradas = 0;
+    perguntaAtual = 0;
+    tempoRestante = 600;
+});
