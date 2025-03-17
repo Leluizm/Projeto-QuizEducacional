@@ -496,7 +496,7 @@ function mostrarResultado() {
   document.getElementById("nome-aluno").value = "";
   document.getElementById("ra").value = "";
 
-    // Enviar dados para o backend
+    // Enviar dados para o backend   
     const resultado = {
       nomeAluno: nomeAluno,
       raAluno: raAluno,
